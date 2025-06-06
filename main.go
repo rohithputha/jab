@@ -2,20 +2,24 @@ package main
 
 import (
 	"fmt"
+	"github.com/rohithputha/jab/memtbl"
+	"time"
 )
 
 //TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
-// the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
+// the <icon src="AllIcons.Actions.execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
 
 func main() {
-	//TIP <p>Press <shortcut actionId="ShowIntentionActions"/> when your caret is at the underlined text
-	// to see how GoLand suggests fixing the warning.</p><p>Alternatively, if available, click the lightbulb to view possible fixes.</p>
-	s := "gopher"
-	fmt.Printf("Hello and welcome, %s!\n", s)
-
-	for i := 1; i <= 5; i++ {
-		//TIP <p>To start your debugging session, right-click your code in the editor and select the Debug option.</p> <p>We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-		// for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.</p>
-		fmt.Println("i =", 100/i)
+	memtbl.InitTables("latest.log")
+	memtbl.CreateTable("testTable", "id", "string", []string{"name"}, []string{"string"})
+	table, err := memtbl.TablesObj.NameTblMap["testTable"]
+	if err {
+		fmt.Println(err)
 	}
+	e := table.CreateAndAddKV("hello", "world")
+	if e != nil {
+		return
+	}
+	fmt.Println(string(table.CreateAndGetKV("hello").GetData()))
+	time.Sleep(1 * time.Second)
 }
